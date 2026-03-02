@@ -2,7 +2,7 @@
 
 **2026 ICLR paper:** [Cite Pretrain: Retrieval-Free Knowledge Attribution for Large Language Models](https://openreview.net/forum?id=D9bLUj7wUW)
 
-This repository implements **CitePretrain**, a framework for teaching LLMs to produce internal citations from training-time knowledge without retrieval at inference time. It introduces CitePretrainBench (Wikipedia, Common Crawl, arXiv-derived QA sources, and novel documents) and compares Passive Indexing with Active Indexing, where source->fact and fact->source synthetic supervision are jointly used. Across short-form and long-form citation tasks, Active Indexing improves citation quality, with up to **30.2% citation precision** gain over passive indexing (as reported in the paper).
+This repository implements **CitePretrain**, a framework for teaching LLMs to produce internal citations from training-time knowledge without retrieval at inference time. It introduces CitePretrainBench (Wikipedia, Common Crawl, arXiv-derived QA sources, and novel documents) and compares Passive Indexing with Active Indexing, where source->fact and fact->source synthetic supervision are jointly used. 
 
 ## Prerequisites and Installation
 
@@ -47,18 +47,25 @@ Important:
 
 ## Evaluation
 
-### Step 1 (Required): Database Setup
+### Step 1 (Required): Evaluation Prerequisites Setup
 
-Evaluation requires the knowledge-source database.
-
-1. Edit [`scripts/setup_db.sh`](/Users/k/Desktop/projects/CitePretrain/scripts/setup_db.sh):
-- set `LOCAL_DIR` to your local path
-- set `is_first_time=True` for first import, then `False` for later runs
-2. Run:
+1. Set up the knowledge-source database:
+Edit [`scripts/setup_db.sh`](/Users/k/Desktop/projects/CitePretrain/scripts/setup_db.sh), set `LOCAL_DIR` and `is_first_time`, then run:
 
 ```bash
 bash scripts/setup_db.sh
 ```
+
+2. Set OpenAI API key (used by evaluator components in some tasks):
+
+```bash
+export OPENAI_API_KEY=your_api_key_here
+```
+
+OpenAI usage by task:
+- `repliqa` and `sciqag`: GPT-based answer-quality scoring in evaluator.
+- `asqa` and `eli5`: GPT-based long-form fact/source extraction by default.
+- Long-form GPT extraction can be disabled by setting `USE_GPT_TO_EXTRACT = False` in [`evaluation/citation_longform.py`](/Users/k/Desktop/projects/CitePretrain/evaluation/citation_longform.py), which falls back to rule-based extraction.
 
 ### Step 2: Run Evaluation
 
@@ -68,19 +75,13 @@ Script example:
 bash scripts/eval.sh
 ```
 
-Note: `scripts/eval.sh` is a template. Update `CONFIG_PATH` and `LOCAL_DIR` in that script before running.
-
-OpenAI API key requirement for evaluation:
-- `repliqa` and `sciqag` use GPT-based answer-quality scoring in the evaluator.
-- `asqa` and `eli5` use GPT-based long-form fact/source extraction by default.
-- You can turn off GPT extraction for long-form citation evaluation by setting `USE_GPT_TO_EXTRACT = False` in [`evaluation/citation_longform.py`](/Users/k/Desktop/projects/CitePretrain/evaluation/citation_longform.py). In that mode, the evaluator falls back to rule-based extraction.
-
-Before running evaluation, export:
+Direct command equivalent:
 
 ```bash
-export OPENAI_API_KEY=your_api_key_here
+python run.py --config_path configures/eval_repliqa.yml
 ```
 
+Note: `scripts/eval.sh` is a template. Update `CONFIG_PATH` and `LOCAL_DIR` in that script before running.
 
 Other evaluation configs:
 - [`configures/eval_sciqag.yml`](/Users/k/Desktop/projects/CitePretrain/configures/eval_sciqag.yml)
