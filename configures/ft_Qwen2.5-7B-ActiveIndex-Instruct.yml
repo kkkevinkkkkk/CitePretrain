@@ -1,0 +1,22 @@
+version: Qwen2.5-7B-ActiveIndex_Instruct
+seed: 42
+
+exp_name: ft_citation_fm
+model_name: "kkkevinkkk/Qwen2.5-7B-citation-raw"
+sample_num: -1
+save_dir: ${oc.env:LOCAL_DIR}/results
+dataset_name: cite_pretrain
+train_data_path: ${oc.env:LOCAL_DIR}/data/ft_citation/mixed/train_qwen.jsonl
+dev_data_path: ${oc.env:LOCAL_DIR}/data/ft_citation/mixed/dev_qwen.jsonl
+adapter_id: ${oc.env:LOCAL_DIR}/checkpoints/Qwen2.5-7B-ActiveIndex-CPT
+
+learning_rate: 5e-6
+eval_steps: 0.2
+save_steps: 0.2
+logging_steps: 50
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 4
+num_train_epochs: 5
+warmup_steps: 50
+max_length: 2048
+optimizer: "paged_adamw_8bit" # "paged_adamw_8bit"

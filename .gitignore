@@ -1,0 +1,8 @@
+/KILT/
+# /notebooks/
+/Synthetic_Continued_Pretraining/
+modify_yml.py
+log_results.py
+run_extract_wiki_doc.py
+.DS_Store
+.idea/

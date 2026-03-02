@@ -1,0 +1,22 @@
+version: eval_sciqag
+seed: 1
+exp_name: run_citation_ctype-1_constrained
+model: kkkevinkkk/Qwen2.5-7B-citation
+model_path: ${oc.env:LOCAL_DIR}/checkpoints/Qwen2.5-7B-ActiveIndex-Instruct
+model_name: Qwen2.5-7B-ActiveIndex-Instruct
+confidence_method: ''
+dataset_name: sciqag
+task_type: citation_st_ic2
+skip_special_tokens: false
+eval_file: ${oc.env:LOCAL_DIR}/data/evaluation/test/sciqag.jsonl
+save_dir: ${oc.env:LOCAL_DIR}
+sample_size: 1000
+num_return_sequences: 1
+do_eval: true
+n_shot: 0
+n_doc: 0
+max_new_tokens: 128
+use_vllm: true
+citations_list_file: ${oc.env:LOCAL_DIR}/data/evaluation/total_doc_ids.jsonl
+postprocess_funcs:
+- filter_repetition

@@ -1,0 +1,26 @@
+version: 9.4.0
+seed: 42
+
+exp_name: pretrain_doc_fm
+model_name: "kkkevinkkk/Qwen2.5-7B-citation-raw"
+sample_num: -1
+save_dir: ${oc.env:LOCAL_DIR}/results
+dataset_name: cite_pretrain_set-0
+train_data_path: ${oc.env:LOCAL_DIR}/data/pretrain_docs/set-0/reverse_pst/train_chunk-768_indoc-01_cross-doc-l100-final_qwen.bin
+dev_data_path: ${oc.env:LOCAL_DIR}/data/pretrain_docs/set-0/reverse_pst/dev_chunk-768_qwen.bin
+
+
+
+learning_rate: 5e-5
+eval_steps: 2000
+save_steps: 20000000
+logging_steps: 200
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 16
+num_train_epochs: 3
+warmup_steps: 10
+max_length: 2048
+lr_scheduler_type: constant_with_warmup
+
+optimizer: "paged_adamw_8bit" # "paged_adamw_8bit"
+#keep_ckpts: true
